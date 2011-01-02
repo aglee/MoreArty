@@ -11,6 +11,8 @@
 		7383692512D101D400BECEF3 /* TaskWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7383692312D101D400BECEF3 /* TaskWrapper.m */; };
 		7383693112D1023A00BECEF3 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 7383692F12D1023A00BECEF3 /* MainMenu.nib */; };
 		7383693812D1027800BECEF3 /* ReadMe.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7383693612D1027800BECEF3 /* ReadMe.rtf */; };
+		73BE7E9612D1037B00741883 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 73BE7E9512D1037B00741883 /* Credits.html */; };
+		73BE7EA012D1043F00741883 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 73BE7E9F12D1043F00741883 /* LICENSE.txt */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -30,6 +32,8 @@
 		7383692312D101D400BECEF3 /* TaskWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskWrapper.m; path = Sources/TaskWrapper.m; sourceTree = "<group>"; };
 		7383693012D1023A00BECEF3 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		7383693712D1027800BECEF3 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/ReadMe.rtf; sourceTree = "<group>"; };
+		73BE7E9512D1037B00741883 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
+		73BE7E9F12D1043F00741883 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MoreArty-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MoreArty-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* MoreArty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoreArty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -86,6 +90,7 @@
 		29B97314FDCFA39411CA2CEA /* MoreArty */ = {
 			isa = PBXGroup;
 			children = (
+				73BE7E9F12D1043F00741883 /* LICENSE.txt */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -111,6 +116,7 @@
 				8D1107310486CEB800E47090 /* MoreArty-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				7383692F12D1023A00BECEF3 /* MainMenu.nib */,
+				73BE7E9512D1037B00741883 /* Credits.html */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -177,6 +183,8 @@
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				7383693112D1023A00BECEF3 /* MainMenu.nib in Resources */,
 				7383693812D1027800BECEF3 /* ReadMe.rtf in Resources */,
+				73BE7E9612D1037B00741883 /* Credits.html in Resources */,
+				73BE7EA012D1043F00741883 /* LICENSE.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
