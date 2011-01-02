@@ -12,9 +12,12 @@
 				 delegate:(id <TaskWrapperDelegate>)aDelegate;
 {
 	self = [super init];
-	taskDelegate = aDelegate;
-	commandPath = [pathToCommand copy];
-	arguments = [commandArguments retain];
+	if (self)
+	{
+		taskDelegate = aDelegate;
+		commandPath = [pathToCommand copy];
+		arguments = [commandArguments retain];
+	}
 	
 	return self;
 }
