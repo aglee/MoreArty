@@ -63,7 +63,9 @@
 		// in ourselves as the delegate for this TaskWrapper object, the path
 		// to the command-line tool, and the contents of the text field that 
 		// displays what the user wants to search on
-		searchTask=[[TaskWrapper alloc] initWithDelegate:self arguments:[NSArray arrayWithObjects:@"/usr/bin/locate",[searchStringTextField stringValue],nil]];
+		searchTask=[[TaskWrapper alloc] initWithCommandPath:@"/usr/bin/locate"
+												  arguments:[NSArray arrayWithObject:[searchStringTextField stringValue]]
+												   delegate:self];
 		// kick off the process asynchronously
 		[searchTask startTask];
 	}
@@ -106,7 +108,7 @@
 // A callback that gets called when a TaskWrapper is launched, allowing us to do any setup
 // that is needed from the app side.  This method is implemented as a part of conforming
 // to the TaskWrapperDelegate protocol.
-- (void)taskWrapperDidStartTask:(TaskWrapper *)taskWrapper
+- (void)taskWrapperWillStartTask:(TaskWrapper *)taskWrapper
 {
 	searchTaskIsRunning=YES;
 	// clear the results
