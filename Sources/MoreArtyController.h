@@ -6,7 +6,7 @@
 #import "TaskWrapper.h"
 
 /*! Controller class that operates as the go-between for the view (the UI) and the model (the locate database).  The point of this code is to show how you can wrap a UNIX task in a nice Cocoa GUI, and get back the output (which you could then operate on or parse further if you choose). */
-@interface MoriarityController : NSObject <TaskWrapperDelegate>
+@interface MoreArtyController : NSObject <TaskWrapperDelegate>
 {
 	IBOutlet NSTextField *searchStringTextField;
 	IBOutlet NSButton *sleuthButton;

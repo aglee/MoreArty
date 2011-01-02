@@ -2,9 +2,9 @@
 // <http://developer.apple.com/library/mac/#samplecode/Moriarity/Introduction/Intro.html>
 // See the accompanying LICENSE.txt for Apple's original terms of use.
 
-#import "MoriarityController.h"
+#import "MoreArtyController.h"
 
-@implementation MoriarityController
+@implementation MoreArtyController
 
 // when first launched, this routine is called when all objects are created
 // and initialized.  It's a chance for us to set things up before the user gets
@@ -33,7 +33,7 @@
 		// Explain to the user that they need to go update the database as root.
 		// That is, if they want locate to be able to really find *any* file
 		// on their hard drive (perhaps not great for security, but good for usability).
-		NSRunAlertPanel(@"Error",@"Sorry, Moriarity's 'locate' database is missing or empty.  In a terminal, as root run '/usr/libexec/locate.updatedb' and try Moriarity again.", @"OK",NULL,NULL);
+		NSRunAlertPanel(@"Error",@"Sorry, your system's 'locate' database is missing or empty.  In a terminal, as root run '/usr/libexec/locate.updatedb' and try MoreArty again.", @"OK",NULL,NULL);
 		[NSApp terminate:nil];
 	}
 }

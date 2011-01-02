@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7383692412D101D400BECEF3 /* MoriarityController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7383692112D101D400BECEF3 /* MoriarityController.m */; };
+		7383692412D101D400BECEF3 /* MoreArtyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7383692112D101D400BECEF3 /* MoreArtyController.m */; };
 		7383692512D101D400BECEF3 /* TaskWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7383692312D101D400BECEF3 /* TaskWrapper.m */; };
 		7383693112D1023A00BECEF3 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 7383692F12D1023A00BECEF3 /* MainMenu.nib */; };
 		7383693812D1027800BECEF3 /* ReadMe.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 7383693612D1027800BECEF3 /* ReadMe.rtf */; };
@@ -26,8 +26,8 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Sources/main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		7383692012D101D400BECEF3 /* MoriarityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoriarityController.h; path = Sources/MoriarityController.h; sourceTree = "<group>"; };
-		7383692112D101D400BECEF3 /* MoriarityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MoriarityController.m; path = Sources/MoriarityController.m; sourceTree = "<group>"; };
+		7383692012D101D400BECEF3 /* MoreArtyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoreArtyController.h; path = Sources/MoreArtyController.h; sourceTree = "<group>"; };
+		7383692112D101D400BECEF3 /* MoreArtyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MoreArtyController.m; path = Sources/MoreArtyController.m; sourceTree = "<group>"; };
 		7383692212D101D400BECEF3 /* TaskWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskWrapper.h; path = Sources/TaskWrapper.h; sourceTree = "<group>"; };
 		7383692312D101D400BECEF3 /* TaskWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskWrapper.m; path = Sources/TaskWrapper.m; sourceTree = "<group>"; };
 		7383693012D1023A00BECEF3 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
@@ -53,8 +53,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				7383692012D101D400BECEF3 /* MoriarityController.h */,
-				7383692112D101D400BECEF3 /* MoriarityController.m */,
+				7383692012D101D400BECEF3 /* MoreArtyController.h */,
+				7383692112D101D400BECEF3 /* MoreArtyController.m */,
 				7383692212D101D400BECEF3 /* TaskWrapper.h */,
 				7383692312D101D400BECEF3 /* TaskWrapper.m */,
 			);
@@ -90,7 +90,6 @@
 		29B97314FDCFA39411CA2CEA /* MoreArty */ = {
 			isa = PBXGroup;
 			children = (
-				73BE7E9F12D1043F00741883 /* LICENSE.txt */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -112,11 +111,12 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				73BE7E9512D1037B00741883 /* Credits.html */,
+				73BE7E9F12D1043F00741883 /* LICENSE.txt */,
 				7383693612D1027800BECEF3 /* ReadMe.rtf */,
 				8D1107310486CEB800E47090 /* MoreArty-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				7383692F12D1023A00BECEF3 /* MainMenu.nib */,
-				73BE7E9512D1037B00741883 /* Credits.html */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -196,7 +196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				7383692412D101D400BECEF3 /* MoriarityController.m in Sources */,
+				7383692412D101D400BECEF3 /* MoreArtyController.m in Sources */,
 				7383692512D101D400BECEF3 /* TaskWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
