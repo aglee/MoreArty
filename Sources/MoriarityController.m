@@ -30,7 +30,7 @@
 {
 	if (findRunning)
 	{
-		// This stops the task and calls our callback (-processFinished)
+		// This stops the task and calls our callback (-taskWrapper:didFinishTaskWithStatus:)
 		[searchTask stopProcess];
 		// Release the memory for this wrapper object
 		[searchTask release];
@@ -43,18 +43,18 @@
 		if (searchTask!=nil)
 			[searchTask release];
 		// Let's allocate memory for and initialize a new TaskWrapper object, passing
-		// in ourselves as the controller for this TaskWrapper object, the path
+		// in ourselves as the delegate for this TaskWrapper object, the path
 		// to the command-line tool, and the contents of the text field that 
 		// displays what the user wants to search on
-		searchTask=[[TaskWrapper alloc] initWithController:self arguments:[NSArray arrayWithObjects:@"/usr/bin/locate",[findTextField stringValue],nil]];
+		searchTask=[[TaskWrapper alloc] initWithDelegate:self arguments:[NSArray arrayWithObjects:@"/usr/bin/locate",[findTextField stringValue],nil]];
 		// kick off the process asynchronously
 		[searchTask startProcess];
 	}
 }
 
-// This callback is implemented as part of conforming to the ProcessController protocol.
+// This callback is implemented as part of conforming to the TaskWrapperDelegate protocol.
 // It will be called whenever there is output from the TaskWrapper.
-- (void)appendOutput:(NSString *)output
+- (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output
 {
 	// add the string (a chunk of the results from locate) to the NSTextView's
 	// backing store, in the form of an attributed string
@@ -76,8 +76,8 @@
 
 // A callback that gets called when a TaskWrapper is launched, allowing us to do any setup
 // that is needed from the app side.  This method is implemented as a part of conforming
-// to the ProcessController protocol.
-- (void)processStarted
+// to the TaskWrapperDelegate protocol.
+- (void)taskWrapperDidStartTask:(TaskWrapper *)taskWrapper
 {
 	findRunning=YES;
 	// clear the results
@@ -88,8 +88,8 @@
 
 // A callback that gets called when a TaskWrapper is completed, allowing us to do any cleanup
 // that is needed from the app side.  This method is implemented as a part of conforming
-// to the ProcessController protocol.
-- (void)processFinished
+// to the TaskWrapperDelegate protocol.
+- (void)taskWrapper:(TaskWrapper *)taskWrapper didFinishTaskWithStatus:(int)terminationStatus
 {
 	findRunning=NO;
 	// change the button's title back for the next search
