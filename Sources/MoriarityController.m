@@ -10,12 +10,10 @@
 // a fresh Mac OS X install has a very small database file, that contains no useful information.
 - (BOOL)ensureLocateDBExists
 {
-	NSDictionary *attr;
-	
 	if ([[NSFileManager defaultManager] fileExistsAtPath:@"/var/db/locate.database"]==YES)
 	{
-		attr=[[NSFileManager defaultManager] fileAttributesAtPath:@"/var/db/locate.database" traverseLink:YES];
-		if ([attr fileSize]>4096)//we pick some size that seems large enough that it couldn't be empty
+		NSDictionary *attr=[[NSFileManager defaultManager] attributesOfItemAtPath:@"/var/db/locate.database" error:NULL];
+		if (attr==nil || [attr fileSize]>4096)//we pick some size that seems large enough that it couldn't be empty
 			return YES;
 		else
 			return NO;

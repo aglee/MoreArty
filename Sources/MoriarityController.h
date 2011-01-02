@@ -19,5 +19,4 @@
 }
 - (IBAction)sleuth:(id)sender; // the action that gets executed when the button is pushed
 - (IBAction)displayReleaseNotes:(id)sender; // powers our addition to the help menu
-- (BOOL)ensureLocateDBExists; // uses a heuristic to make sure we're up to date
 @end
