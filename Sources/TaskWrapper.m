@@ -92,7 +92,7 @@
 
 - (void)stopTask
 {
-	// Disconnect the notification's weak reference to us.
+	// Disconnect the notification center's weak reference to us.
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadCompletionNotification object:[[_task standardOutput] fileHandleForReading]];
 	
 	// Make sure the task has actually stopped.
