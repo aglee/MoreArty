@@ -3,45 +3,48 @@
 // See the accompanying LICENSE.txt for Apple's original terms of use.
 
 #import <Foundation/Foundation.h>
+#import "TaskWrapperDelegate.h"
 
-@protocol TaskWrapperDelegate;
-
-/*! A generalized process handling class that makes asynchronous interaction with an NSTask easier.  There is also a delegate protocol designed to work in conjunction with the TaskWrapper class; your delegate should conform to this protocol.  TaskWrapper objects are one-shot (since NSTask is one-shot); if you need to run a task more than once, destroy/create new TaskWrapper objects. */
-@interface TaskWrapper : NSObject {
-	NSTask 			*task;
-	id				<TaskWrapperDelegate>taskDelegate;
-	NSString		*commandPath;
-	NSArray			*arguments;
+/*!
+ * Wrapper around NSTask, with a delegate that provides hooks to various
+ * points in the lifetime of the task. Evolved from the TaskWrapper class
+ * in Apple's Moriarity sample code.
+ *
+ * There is a delegate method to receive output from the task's stdout
+ * and stderr, but no way to interactively send input via stdin.
+ *
+ * TaskWrapper objects are one-shot, like NSTask. If you need to run
+ * a task more than once, create new TaskWrapper instances.
+ */
+@interface TaskWrapper : NSObject
+{
+	id <TaskWrapperDelegate>_taskDelegate;
+	NSString *_commandPath;
+	NSArray *_commandArguments;
+	NSDictionary *_environment;
+	NSTask *_task;
 }
 
-// This is the designated initializer - pass in your delegate and any task arguments.
-// The first argument should be the path to the executable to launch with the NSTask.
+@property (readonly) NSString *commandPath;
+
+/*!
+ * commandPath is the path to the executable to launch. env contains environment variables
+ * you want the command to run with. env can be nil.
+ */
 - (id)initWithCommandPath:(NSString *)commandPath
 				arguments:(NSArray *)args
+			  environment:(NSDictionary *)env
 				 delegate:(id <TaskWrapperDelegate>)aDelegate;
 
-// This method launches the process, setting up asynchronous feedback notifications.
 - (void)startTask;
 
-// This method stops the process, stoping asynchronous feedback notifications.
 - (void)stopTask;
 
-@end
-
-
-@protocol TaskWrapperDelegate
-@optional
-
-// This method is a callback which your delegate can use to do other initialization when a process
-// is launched.
-- (void)taskWrapperWillStartTask:(TaskWrapper *)taskWrapper;
-
-// Your delegate's implementation of this method will be called when output arrives from the NSTask.
-// Output will come from both stdout and stderr, per the TaskWrapper implementation.
-- (void)taskWrapper:(TaskWrapper *)taskWrapper didProduceOutput:(NSString *)output;
-
-// This method is a callback which your delegate can use to do other cleanup when a process
-// is halted.
-- (void)taskWrapper:(TaskWrapper *)taskWrapper didFinishTaskWithStatus:(int)terminationStatus;
+/*!
+ * Returns a string consisting of the command path followed by arguments. Doesn't do
+ * any escaping, so you may not be able to paste this into Terminal and run it. But
+ * can be useful for debugging/logging.
+ */
+- (NSString *)expandedCommand;
 
 @end

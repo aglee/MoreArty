@@ -32,6 +32,7 @@
 		7383692312D101D400BECEF3 /* TaskWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskWrapper.m; path = Sources/TaskWrapper.m; sourceTree = "<group>"; };
 		7383693012D1023A00BECEF3 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		7383693712D1027800BECEF3 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/ReadMe.rtf; sourceTree = "<group>"; };
+		73AE314713F82CEC00106898 /* TaskWrapperDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskWrapperDelegate.h; path = Sources/TaskWrapperDelegate.h; sourceTree = "<group>"; };
 		73BE7E9512D1037B00741883 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Credits.html; sourceTree = "<group>"; };
 		73BE7E9F12D1043F00741883 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* MoreArty-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MoreArty-Info.plist"; sourceTree = "<group>"; };
@@ -57,6 +58,7 @@
 				7383692112D101D400BECEF3 /* MoreArtyController.m */,
 				7383692212D101D400BECEF3 /* TaskWrapper.h */,
 				7383692312D101D400BECEF3 /* TaskWrapper.m */,
+				73AE314713F82CEC00106898 /* TaskWrapperDelegate.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";

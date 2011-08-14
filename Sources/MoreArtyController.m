@@ -65,6 +65,7 @@
 		// displays what the user wants to search on
 		searchTask=[[TaskWrapper alloc] initWithCommandPath:@"/usr/bin/locate"
 												  arguments:[NSArray arrayWithObject:[searchStringTextField stringValue]]
+												environment:nil
 												   delegate:self];
 		// kick off the process asynchronously
 		[searchTask startTask];

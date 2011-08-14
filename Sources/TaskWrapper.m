@@ -6,133 +6,150 @@
 
 @implementation TaskWrapper
 
-// Do basic initialization
+@synthesize commandPath = _commandPath;
+
 - (id)initWithCommandPath:(NSString *)pathToCommand
 				arguments:(NSArray *)commandArguments
+			  environment:(NSDictionary *)env
 				 delegate:(id <TaskWrapperDelegate>)aDelegate;
 {
 	self = [super init];
 	if (self)
 	{
-		taskDelegate = aDelegate;
-		commandPath = [pathToCommand copy];
-		arguments = [commandArguments retain];
+		_taskDelegate = aDelegate;
+		_commandPath = [pathToCommand copy];
+		_commandArguments = [commandArguments copy];
+		_environment = [env copy];
 	}
 	
 	return self;
 }
 
-// tear things down
 - (void)dealloc
 {
-	[self stopTask];
+	[self stopTask];  // Besides ensuring the task is stopped, this disconnects weak references.
 	
-	[task release];
-	[commandPath release];
-	[arguments release];
+	[_commandPath release];
+	[_commandArguments release];
+	[_environment release];
+	[_task release];
 	
 	[super dealloc];
 }
 
-// Here's where we actually kick off the process via an NSTask.
 - (void)startTask
 {
-	// We first let the delegate know that we are starting
-	if ([(id)taskDelegate respondsToSelector:@selector(taskWrapperWillStartTask:)])
+	// Notify the delegate that we are starting.
+	if ([(id)_taskDelegate respondsToSelector:@selector(taskWrapperWillStartTask:)])
 	{
-		[taskDelegate taskWrapperWillStartTask:self];
+		[_taskDelegate taskWrapperWillStartTask:self];
 	}
 	
-	task = [[NSTask alloc] init];
-	// The output of stdout and stderr is sent to a pipe so that we can catch it later
-	// and send it along to the delegate; notice that we don't bother to do anything with stdin,
-	// so this class isn't as useful for a task that you need to send info to, not just receive.
-	[task setStandardOutput: [NSPipe pipe]];
-	[task setStandardError: [task standardOutput]];
-	// The path to the binary is the first argument that was passed in
-	[task setLaunchPath: commandPath];
-	// The rest of the task arguments are just grabbed from the array
-	[task setArguments: arguments];
+	// Instantiate the NSTask that will run the specified command.
+	_task = [[NSTask alloc] init];
 	
-	// Here we register as an observer of the NSFileHandleReadCompletionNotification, which lets
-	// us know when there is data waiting for us to grab it in the task's file handle (the pipe
-	// to which we connected stdout and stderr above).  -_taskDidProduceOutput: will be called when there
-	// is data waiting.  The reason we need to do this is because if the file handle gets
+	// The output of stdout and stderr is sent to a pipe so that we can catch it later
+	// and send it to the delegate. We don't do anything with stdin, so there is no
+	// way to interactively send input to the task.
+	[_task setStandardOutput:[NSPipe pipe]];
+	[_task setStandardError:[_task standardOutput]];
+	[_task setLaunchPath:_commandPath];
+	[_task setArguments:_commandArguments];
+	
+	if (_environment)
+	{
+		[_task setEnvironment:_environment];
+	}
+	
+	// Register to be notified when there is data waiting in the task's file handle (the pipe
+	// to which we connected stdout and stderr above). We do this because if the file handle gets
 	// filled up, the task will block waiting to send data and we'll never get anywhere.
 	// So we have to keep reading data from the file handle as we go.
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(_taskDidProduceOutput:) 
-												 name: NSFileHandleReadCompletionNotification 
-											   object: [[task standardOutput] fileHandleForReading]];
-	// We tell the file handle to go ahead and read in the background asynchronously, and notify
-	// us via the callback registered above when we signed up as an observer.  The file handle will
-	// send a NSFileHandleReadCompletionNotification when it has data that is available.
-	[[[task standardOutput] fileHandleForReading] readInBackgroundAndNotify];
+												 name:NSFileHandleReadCompletionNotification 
+											   object:[[_task standardOutput] fileHandleForReading]];
 	
-	// launch the task asynchronously
-	[task launch];    
+	// Tell the file handle to read in the background asynchronously. The file handle will
+	// send a NSFileHandleReadCompletionNotification (which we just registered to observe)
+	// when it has data available.
+	[[[_task standardOutput] fileHandleForReading] readInBackgroundAndNotify];
+	
+	// Launch the task asynchronously.
+	[_task launch];    
 }
 
-// If the task ends, there is no more data coming through the file handle even when the notification is
-// sent, or the process object is released, then this method is called.
+// Notifies the delegate that there is data.
+- (void)_sendDataToDelegate:(NSData *)data
+{
+	if ([data length] && [(id)_taskDelegate respondsToSelector:@selector(taskWrapper:didProduceOutput:)])
+	{
+		NSString *outputString = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+		
+		[_taskDelegate taskWrapper:self didProduceOutput:outputString];
+	}
+}
+
 - (void)stopTask
 {
-	/*    // we tell the delegate that we finished, via the callback, and then blow away our connection
-	 // to the delegate.  NSTasks are one-shot (not for reuse), so we might as well be too.
-	 if ([(id)delegate respondsToSelector:@selector(taskWrapper:didFinishTaskWithStatus:)])
-	 {
-		[delegate taskWrapper:self didFinishTaskWithStatus:[task terminationStatus]];
-	 }
-	 delegate = nil;*/
+	// Disconnect the notification's weak reference to us.
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadCompletionNotification object:[[_task standardOutput] fileHandleForReading]];
+	
+	// Make sure the task has actually stopped.
+	[_task terminate];
+	
+	// Drain any remaining output data the task generates.
 	NSData *data;
-	
-	// It is important to clean up after ourselves so that we don't leave potentially deallocated
-	// objects as observers in the notification center; this can lead to crashes.
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:NSFileHandleReadCompletionNotification object: [[task standardOutput] fileHandleForReading]];
-	
-	// Make sure the task has actually stopped!
-	[task terminate];
-	
-	while ((data = [[[task standardOutput] fileHandleForReading] availableData]) && [data length])
+	while ((data = [[[_task standardOutput] fileHandleForReading] availableData]) && [data length])
 	{
-		if ([(id)taskDelegate respondsToSelector:@selector(taskWrapper:didProduceOutput:)])
-		{
-			[taskDelegate taskWrapper:self didProduceOutput: [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]];
-		}
+		// Notify the delegate that there is data.
+		[self _sendDataToDelegate:data];
 	}
 	
-	// we tell the delegate that we finished, via the callback, and then blow away our connection
-	// to the delegate.  NSTasks are one-shot (not for reuse), so we might as well be too.
-	if ([(id)taskDelegate respondsToSelector:@selector(taskWrapper:didFinishTaskWithStatus:)])
+	// Notify the delegate that the task finished.
+	if ([(id)_taskDelegate respondsToSelector:@selector(taskWrapper:didFinishTaskWithStatus:)])
 	{
-		[taskDelegate taskWrapper:self didFinishTaskWithStatus:[task terminationStatus]];
+		NSInteger taskStatus = ([_task isRunning] ? -9999 : [_task terminationStatus]);
+		
+		[_taskDelegate taskWrapper:self didFinishTaskWithStatus:taskStatus];
 	};
-	taskDelegate = nil;
+	
+	// Disconnect our weak reference to the delegate.
+	_taskDelegate = nil;
 }
 
-// This method is called asynchronously when data is available from the task's file handle.
-// We just pass the data along to the delegate as an NSString.
+// Called asynchronously when data is available from the task's file handle.
+// [aNotification object] is the file handle.
 - (void)_taskDidProduceOutput:(NSNotification *)aNotification
 {
 	NSData *data = [[aNotification userInfo] objectForKey:NSFileHandleNotificationDataItem];
-	// If the length of the data is zero, then the task is basically over - there is nothing
-	// more to get from the handle so we may as well shut down.
+	
 	if ([data length])
 	{
-		// Send the data on to the delegate; we can't just use +stringWithUTF8String: here
-		// because -[data bytes] is not necessarily a properly terminated string.
-		// -initWithData:encoding: on the other hand checks -[data length]
-		if ([(id)taskDelegate respondsToSelector:@selector(taskWrapper:didProduceOutput:)])
-		{
-			[taskDelegate taskWrapper:self didProduceOutput:[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]];
-		}
-	} else {
-		// We're finished here
+		// Notify the delegate that there is data.
+		[self _sendDataToDelegate:data];
+		
+		// [agl] Moved this readInBackgroundAndNotify up here from a few lines down.
+		// Schedule the file handle to read more data.
+		[[aNotification object] readInBackgroundAndNotify];  
+	}
+	else
+	{
+		// There is no more data to get from the file handle, so shut down.
+		// This will in turn notify the delegate.
 		[self stopTask];
 	}
 	
-	// we need to schedule the file handle go read more data in the background again.
-	[[aNotification object] readInBackgroundAndNotify];  
+// [agl] Seems to me this should be in the if-block above -- am I wrong?
+//	// Schedule the file handle to read more data.
+//	[[aNotification object] readInBackgroundAndNotify];  
+}
+
+- (NSString *)expandedCommand
+{
+	return [NSString stringWithFormat:@"%@ %@",
+			_commandPath,
+			[_commandArguments componentsJoinedByString:@" "]];
 }
 
 @end
